@@ -1,0 +1,30 @@
+#!/bin/env bash
+
+## AYTHOR: Vladimir Ryazansev
+## MAIL:   361elfforest@gmail.com
+
+## Скрипт устоновливает EMACS и превращает
+## файл README.org в скипт для устоновка
+## необходимых программ и настроек для linux
+## TODO: Найти для Debian как устоновить emacs28
+
+
+SCRIPT="`dirname "$(readlink -f $0)"`"
+
+function main(){
+	echo "Старт конфигурация"
+	if [[ ! -f /bin/emacs ]]; then
+		# Версия будит установленна 27
+		sudo apt install emacs
+	fi
+
+	if [[ -f /bin/emacs ]]; then
+		emacs --batch --eval "(progn (require 'org)(org-babel-tangle-file \"./README.org\"))"
+	fi
+
+	if [ -f ./postInstall.bash ]; then
+    		. ./postInstall.bash
+	fi
+}
+
+main "$@"
